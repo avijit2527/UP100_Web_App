@@ -60,7 +60,10 @@ class Header extends Component {
             }
         })
         .then(res => {
-            console.log(res);
+            console.log(res.data.token);
+            if(res.data.token){
+                this.props.setToken(res.data.token)
+            }
             console.log(res.data);
         })
     }

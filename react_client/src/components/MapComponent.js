@@ -3,6 +3,8 @@ import 'leaflet/dist/leaflet.css';
 import '../map.css';
 import L from 'leaflet';
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
+import axios from 'axios';
+import { SERVERURL } from '../config';
 
 
 const iconPerson = new L.Icon({
@@ -20,18 +22,27 @@ const iconPerson = new L.Icon({
 
 
 class MapComponent extends Component {
-    state = {
-        center: {
-            lat: 26.79,
-            lng: 82.19,
-        },
-        marker: {
-            lat: 26.79,
-            lng: 82.19,
-        },
-        zoom: 13,
-        draggable: true
-    }
+
+
+    constructor(props) {
+        super(props);
+    
+    
+        this.state = {
+            _id: "5ed6159034a7aa228c6a5e31",
+            center: {
+                lat: 26.79,
+                lng: 82.19,
+            },
+            marker: {
+                lat: 26.79,
+                lng: 82.19,
+            },
+            zoom: 13,
+            draggable: true
+        }
+      }
+
 
 
     refmarker = createRef()
@@ -43,8 +54,21 @@ class MapComponent extends Component {
 
     updatePosition = () => {
         const marker = this.refmarker.current
-        console.log(this.refmarker.current);
+        const config = {
+            headers: { Authorization: `bearer ${this.props.token}` }
+        };
+        console.log(this.props.token);
         if (marker != null) {
+            axios({
+                method: 'put',
+                url: SERVERURL + `locations/${marker.props.id}`,
+                data: marker.leafletElement.getLatLng(),
+                headers: { Authorization: `bearer ${this.props.token}` }
+            })
+            .then(res => {
+                console.log(res);
+                console.log(res.data);
+            })
             this.setState({
                 marker: marker.leafletElement.getLatLng(),
             })
@@ -69,6 +93,7 @@ class MapComponent extends Component {
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         />
                         <Marker
+                            id={this.state._id}
                             draggable={this.state.draggable}
                             onDragend={this.updatePosition}
                             icon={iconPerson}

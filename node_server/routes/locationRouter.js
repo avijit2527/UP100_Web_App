@@ -34,18 +34,11 @@ locationRouter.route('/')
             .catch((err) => next(err));
     })
     .put(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
-        Locations.findByIdAndUpdate(req.params.locationId, {
-            $set: req.body
-        }, { new: true })
-            .then((dish) => {
-                res.statusCode = 200;
-                res.setHeader('Content-Type', 'application/json');
-                res.json(dish);
-            }, (err) => next(err))
-            .catch((err) => next(err));
+        res.statusCode = 403;
+        res.end('Put operation not supported on /locations/');
     })
     .delete(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
-        Dishes.remove({})
+        Locations.remove({})
             .then((resp) => {
                 res.statusCode = 200;
                 res.setHeader('Content-Type', 'application/json');
@@ -53,6 +46,49 @@ locationRouter.route('/')
             }, (err) => next(err))
             .catch((err) => next(err));
     });
+
+
+
+    locationRouter.route('/:locationId')
+    .options(cors.corsWithOptions, (req, res) => {
+        res.sendStatus(200);
+    })
+    .get(cors.cors, (req, res, next) => {
+        Locations.findById(req.params.locationId)
+            .then((location) => {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(location);
+            }, (err) => next(err))
+            .catch((err) => next(err));
+    })
+    .post(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+        res.statusCode = 403;
+        res.end('Post operation not supported on /locations/' + req.params.locationId);
+    })
+    .put(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+        Locations.findByIdAndUpdate(req.params.locationId, {
+            $set: req.body
+        }, { new: true })
+            .then((location) => {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(location);
+            }, (err) => next(err))
+            .catch((err) => next(err));
+    })
+    .delete(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+        Locations.findByIdAndRemove(req.params.locationId)
+            .then((resp) => {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(resp);
+            }, (err) => next(err))
+            .catch((err) => next(err));
+    })
+
+
+
 
 
 module.exports = locationRouter;
