@@ -2,9 +2,10 @@ import React, { Component, createRef } from 'react'
 import 'leaflet/dist/leaflet.css';
 import '../map.css';
 import L from 'leaflet';
-import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
+import { Map, TileLayer, Marker, Tooltip } from 'react-leaflet';
 import axios from 'axios';
 import { SERVERURL } from '../config';
+import history from './history';
 
 
 const iconPerson = new L.Icon({
@@ -26,29 +27,29 @@ class MapComponent extends Component {
 
     constructor(props) {
         super(props);
-    
-    
+
+
         this.state = {
-            _id: "5ed6159034a7aa228c6a5e31",
+
             center: {
-                lat: 26.79,
-                lng: 82.19,
+                lat: 26.7,
+                lng: 82.0,
             },
             marker: {
                 lat: 26.79,
                 lng: 82.19,
             },
-            zoom: 13,
-            draggable: true
+            zoom: 9
         }
-      }
+    }
 
 
 
-    refmarker = createRef()
 
-    toggleDraggable = () => {
-        this.setState({ draggable: !this.state.draggable })
+
+    handleMarkerClick = event => {
+        console.log(event);
+        history.push('/route/876');
     }
 
 
@@ -61,20 +62,19 @@ class MapComponent extends Component {
         if (marker != null) {
             axios({
                 method: 'put',
-                url: SERVERURL + `locations/${marker.props.id}`,
+                url: SERVERURL + `vehicles/${marker.props.id}`,
                 data: marker.leafletElement.getLatLng(),
                 headers: { Authorization: `bearer ${this.props.token}` }
             })
-            .then(res => {
-                console.log(res);
-                console.log(res.data);
-            })
-            this.setState({
-                marker: marker.leafletElement.getLatLng(),
-            })
+                .then(res => {
+                    console.log(res);
+                    console.log(res.data);
+                    this.setState({
+                        marker: marker.leafletElement.getLatLng(),
+                    })
+                })
         }
     }
-
 
 
 
@@ -83,6 +83,29 @@ class MapComponent extends Component {
     render() {
         const position = [this.state.center.lat, this.state.center.lng]
         const markerPosition = [this.state.marker.lat, this.state.marker.lng]
+        const allVehicles = this.props.vehicles.map((vehicle) => {
+            console.log(vehicle);
+            return (
+                <div 
+                onClick={this.handleClick}>
+                    <Marker
+                        id={vehicle._id}
+                        draggable={false}
+                        onDragend={this.updatePosition}
+                        onclick= {this.handleMarkerClick}
+                        icon={iconPerson}
+                        position={[vehicle.lat, vehicle.lng]}
+                    >
+                       <Tooltip> 
+                           <span>
+                               <b>Vehicle Id:</b> {vehicle.vehicleId} <br />
+                               <b>Timeslot: </b>{vehicle.timeSlot}
+                           </span>
+                       </Tooltip>
+                    </Marker>
+                </div>
+            );
+        });
 
         return (
             <div className="row">
@@ -92,19 +115,8 @@ class MapComponent extends Component {
                             attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         />
-                        <Marker
-                            id={this.state._id}
-                            draggable={this.state.draggable}
-                            onDragend={this.updatePosition}
-                            icon={iconPerson}
-                            position={markerPosition}
-                            ref={this.refmarker}>
-                            <Popup minWidth={90}>
-                                <span onClick={this.toggleDraggable}>
-                                    {this.state.draggable ? 'DRAG MARKER' : 'MARKER FIXED'}
-                                </span>
-                            </Popup>
-                        </Marker>
+
+                        {allVehicles}
                     </Map>
                 </div>
             </div>

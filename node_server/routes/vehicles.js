@@ -4,41 +4,41 @@ const mongoose = require('mongoose');
 const authenticate = require('../authenticate');
 const cors = require('./cors');
 
-const Locations = require('../models/location');
+const Vehicles = require('../models/vehicle');
 
-const locationRouter = express.Router();
+const vehicleRouter = express.Router();
 
-locationRouter.use(bodyParser.json());
+vehicleRouter.use(bodyParser.json());
 
-locationRouter.route('/')
+vehicleRouter.route('/')
     .options(cors.corsWithOptions, (req, res) => {
         res.sendStatus(200);
     })
-    .get(cors.cors, (req, res, next) => {
-        Locations.find({})
-            .then((locations) => {
+    .get(cors.cors, authenticate.verifyUser,  (req, res, next) => {
+        Vehicles.find({})
+            .then((vehicles) => {
                 res.statusCode = 200;
                 res.setHeader('Content-Type', 'application/json');
-                res.json(locations);
+                res.json(vehicles);
             }, (err) => next(err))
             .catch((err) => next(err));
     })
-    .post(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
-        Locations.create(req.body)
-            .then((location) => {
-                console.log('Location Created ', location);
+    .post(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
+        Vehicles.create(req.body)
+            .then((vehicles) => {
+                console.log('Vehicle Created ', vehicles);
                 res.statusCode = 200;
                 res.setHeader('Content-Type', 'application/json');
-                res.json(location);
+                res.json(vehicles);
             }, (err) => next(err))
             .catch((err) => next(err));
     })
-    .put(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+    .put(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
         res.statusCode = 403;
-        res.end('Put operation not supported on /locations/');
+        res.end('Put operation not supported on /vehicles/');
     })
-    .delete(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
-        Locations.remove({})
+    .delete(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
+        Vehicles.remove({})
             .then((resp) => {
                 res.statusCode = 200;
                 res.setHeader('Content-Type', 'application/json');
@@ -49,36 +49,36 @@ locationRouter.route('/')
 
 
 
-    locationRouter.route('/:locationId')
+    vehicleRouter.route('/:vehicleId')
     .options(cors.corsWithOptions, (req, res) => {
         res.sendStatus(200);
     })
     .get(cors.cors, (req, res, next) => {
-        Locations.findById(req.params.locationId)
-            .then((location) => {
+        Vehicles.findById(req.params.vehicleId)
+            .then((vehicles) => {
                 res.statusCode = 200;
                 res.setHeader('Content-Type', 'application/json');
-                res.json(location);
+                res.json(vehicles);
             }, (err) => next(err))
             .catch((err) => next(err));
     })
-    .post(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+    .post(cors.corsWithOptions, authenticate.verifyUser,(req, res, next) => {
         res.statusCode = 403;
-        res.end('Post operation not supported on /locations/' + req.params.locationId);
+        res.end('Post operation not supported on /vehicles/' + req.params.vehicleId);
     })
-    .put(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
-        Locations.findByIdAndUpdate(req.params.locationId, {
+    .put(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
+        Vehicles.findByIdAndUpdate(req.params.vehicleId, {
             $set: req.body
         }, { new: true })
-            .then((location) => {
+            .then((vehicle) => {
                 res.statusCode = 200;
                 res.setHeader('Content-Type', 'application/json');
-                res.json(location);
+                res.json(vehicle);
             }, (err) => next(err))
             .catch((err) => next(err));
     })
-    .delete(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
-        Locations.findByIdAndRemove(req.params.locationId)
+    .delete(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
+        Vehicles.findByIdAndRemove(req.params.vehicleId)
             .then((resp) => {
                 res.statusCode = 200;
                 res.setHeader('Content-Type', 'application/json');
@@ -91,5 +91,5 @@ locationRouter.route('/')
 
 
 
-module.exports = locationRouter;
+module.exports = vehicleRouter;
 

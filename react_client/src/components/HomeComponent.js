@@ -6,7 +6,10 @@ import MapComponent from './MapComponent';
 function Home(props) {
     return (
         <div className="container">
-            <MapComponent token={props.token}/>
+            <MapComponent 
+            token={props.token}
+            vehicles = {props.vehicles}        
+            />
         </div>
     );
 }

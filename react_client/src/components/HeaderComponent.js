@@ -50,8 +50,9 @@ class Header extends Component {
 
 
     handleLogin(event) {
-        event.preventDefault();
-        console.log(this.state);
+
+        this.toggleModal();
+        //console.log(this.state);
 
 
 
@@ -73,9 +74,8 @@ class Header extends Component {
                 }
                 console.log(res.data);
             })
-
-
-
+            .catch(err => alert("Login Failed! Please Try Again."));
+        event.preventDefault();
     }
 
     render() {
