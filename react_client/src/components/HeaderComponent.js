@@ -3,6 +3,7 @@ import { Navbar, NavbarBrand, Nav, NavbarToggler, Collapse, NavItem, Jumbotron, 
 import { NavLink } from 'react-router-dom';
 import axios from 'axios';
 import { SERVERURL } from '../config';
+import https from 'https';
 
 class Header extends Component {
 
@@ -51,21 +52,30 @@ class Header extends Component {
     handleLogin(event) {
         event.preventDefault();
         console.log(this.state);
-        axios({
-            method: 'post',
-            url: SERVERURL + 'users/login',
-            data: {
+
+
+
+        // At instance level
+        const instance = axios.create({
+            httpsAgent: new https.Agent({
+                rejectUnauthorized: false
+            })
+        });
+        instance.post(SERVERURL + 'users/login',
+            {
                 "username": this.state.username,
                 "password": this.state.password
-            }
-        })
-        .then(res => {
-            console.log(res.data.token);
-            if(res.data.token){
-                this.props.setToken(res.data.token)
-            }
-            console.log(res.data);
-        })
+            })
+            .then(res => {
+                console.log(res.data.token);
+                if (res.data.token) {
+                    this.props.setToken(res.data.token)
+                }
+                console.log(res.data);
+            })
+
+
+
     }
 
     render() {
@@ -74,7 +84,7 @@ class Header extends Component {
                 <Navbar dark expand="md">
                     <div className="container">
                         <NavbarToggler onClick={this.toggleNav} />
-                        <NavbarBrand className="mr-3" href="/"><img src='assets/images/Upplogo.png' height="30" width="41"  alt='UPPLOGO' /></NavbarBrand>
+                        <NavbarBrand className="mr-3" href="/"><img src='assets/images/Upplogo.png' height="30" width="41" alt='UPPLOGO' /></NavbarBrand>
                         <Collapse isOpen={this.state.isNavOpen} navbar>
                             <Nav navbar>
                                 <NavItem>
@@ -108,7 +118,7 @@ class Header extends Component {
                                 <h4>Maintain Law and order</h4>
                             </div>
                             <div className="col-12 col-sm-6">
-                                <img className='img-responsive ml-4' src='assets/images/UP100.png'  height="110" width="500" alt='UPPLOGO' />
+                                <img className='img-responsive ml-4' src='assets/images/UP100.png' height="110" width="500" alt='UPPLOGO' />
                             </div>
                         </div>
                     </div>

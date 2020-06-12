@@ -8,7 +8,7 @@ const locationSchema = new Schema({
         required: true
     },
     lng: {
-        type: String,
+        type: Number,
         required: true
     }
 }, {
