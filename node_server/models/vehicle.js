@@ -3,6 +3,22 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 
+const locationSchema = new Schema({
+    timeSlot: {
+        type: String,
+        required: true
+    },
+    lat: {
+        type: Number,
+        required: true
+    },
+    lng: {
+        type: Number,
+        required: true
+    }
+})
+
+
 const vehicleSchema = new Schema({
     vehicleId: {
         type: String,
@@ -21,10 +37,7 @@ const vehicleSchema = new Schema({
         type: Number,
         required: true
     },
-    draggable: {
-        type: Boolean,
-        default: false
-    }
+    locations: [locationSchema]
 }, {
     timestamps: true
 });
