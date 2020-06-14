@@ -71,7 +71,9 @@ class VehicleRouteComponent extends Component {
 
 
 
-
+    componentDidMount() {
+        console.log(this.props)
+    }
 
     render() {
         const position = [this.state.center.lat, this.state.center.lng]

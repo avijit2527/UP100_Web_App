@@ -61,7 +61,7 @@ class Main extends Component {
 
     const VehicleWithId = ({ match }) => {
       return (
-        <VehicleRouteComponent />
+        <VehicleRouteComponent match={match}/>
       )
     }
 
@@ -78,6 +78,7 @@ class Main extends Component {
     return (
       <div>
         <Header setToken={this.setToken}
+          token={this.token}
           setVehicles={this.setVehicles}
         />
         <Router history={history}>

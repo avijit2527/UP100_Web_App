@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 
 const locationSchema = new Schema({
     timeSlot: {
-        type: String,
+        type: Date,   
         required: true
     },
     lat: {
@@ -34,7 +34,7 @@ const vehicleSchema = new Schema({
         required: true
     },
     timeSlot:  {
-        type: Number,
+        type: Date,
         required: true
     },
     locations: [locationSchema]

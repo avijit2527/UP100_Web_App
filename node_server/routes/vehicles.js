@@ -193,7 +193,7 @@ vehicleRouter.route('/:vehicleId/locations/:locationId')
         res.end('Post operation not supported on /vehicles/' + req.params.vehicleId + '/locations/' + req.params.locationId);
     })
     .put(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
-        Vehicles.findById(req.params.locationId)
+        Vehicles.findById(req.params.vehicleId)
             .then((vehicle) => {
                 if (vehicle != null && vehicle.locations.id(req.params.locationId) != null) {
                     if (req.body.lat) {

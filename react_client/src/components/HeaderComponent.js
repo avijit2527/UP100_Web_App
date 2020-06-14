@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 import axios from 'axios';
 import { SERVERURL } from '../config';
 import https from 'https';
+import '../App.css'
 
 class Header extends Component {
 
@@ -118,7 +119,7 @@ class Header extends Component {
                                 <h4>Maintain Law and order</h4>
                             </div>
                             <div className="col-12 col-sm-6">
-                                <img className='img-responsive ml-4' src='assets/images/UP100.png' height="110" width="500" alt='UPPLOGO' />
+                                <img className='img-fluid  img-responsive up100_image' src='assets/images/UP100.png' alt='UPPLOGO' />
                             </div>
                         </div>
                     </div>

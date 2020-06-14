@@ -48,8 +48,8 @@ class MapComponent extends Component {
 
 
     handleMarkerClick = event => {
-        console.log(event);
-        history.push('/route/876');
+        console.log(event.target.options.id);
+        history.push(`/route/${event.target.options.id}`);
     }
 
 
@@ -99,7 +99,7 @@ class MapComponent extends Component {
                        <Tooltip> 
                            <span>
                                <b>Vehicle Id:</b> {vehicle.vehicleId} <br />
-                               <b>Timeslot: </b>{vehicle.timeSlot}
+                               <b>Timeslot: </b>{new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', year: 'numeric', month: 'short', day:'2-digit'}).format(new Date(Date.parse(vehicle.timeSlot)))}
                            </span>
                        </Tooltip>
                     </Marker>
