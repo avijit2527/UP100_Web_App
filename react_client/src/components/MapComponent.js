@@ -35,10 +35,6 @@ class MapComponent extends Component {
                 lat: 26.7,
                 lng: 82.0,
             },
-            marker: {
-                lat: 26.79,
-                lng: 82.19,
-            },
             zoom: 9
         }
     }
@@ -48,7 +44,7 @@ class MapComponent extends Component {
 
 
     handleMarkerClick = event => {
-        console.log(event.target.options.id);
+        //console.log(event.target.options.id);
         history.push(`/route/${event.target.options.id}`);
     }
 
@@ -58,7 +54,7 @@ class MapComponent extends Component {
         const config = {
             headers: { Authorization: `bearer ${this.props.token}` }
         };
-        console.log(this.props.token);
+        //console.log(this.props.token);
         if (marker != null) {
             axios({
                 method: 'put',
@@ -67,8 +63,8 @@ class MapComponent extends Component {
                 headers: { Authorization: `bearer ${this.props.token}` }
             })
                 .then(res => {
-                    console.log(res);
-                    console.log(res.data);
+                    //console.log(res);
+                    //console.log(res.data);
                     this.setState({
                         marker: marker.leafletElement.getLatLng(),
                     })
@@ -82,9 +78,8 @@ class MapComponent extends Component {
 
     render() {
         const position = [this.state.center.lat, this.state.center.lng]
-        const markerPosition = [this.state.marker.lat, this.state.marker.lng]
         const allVehicles = this.props.vehicles.map((vehicle) => {
-            console.log(vehicle);
+            //console.log(vehicle);
             return (
                 <div 
                 onClick={this.handleClick}>

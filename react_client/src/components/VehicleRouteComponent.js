@@ -2,7 +2,7 @@ import React, { Component, createRef } from 'react'
 import 'leaflet/dist/leaflet.css';
 import '../map.css';
 import L from 'leaflet';
-import { Map, TileLayer, Marker, Tooltip } from 'react-leaflet';
+import { Map, TileLayer, Marker, Tooltip, Polyline } from 'react-leaflet';
 import axios from 'axios';
 import { SERVERURL } from '../config';
 
@@ -30,58 +30,80 @@ class VehicleRouteComponent extends Component {
         this.state = {
 
             center: {
-                lat: 26.7,
-                lng: 82.0,
+                lat: this.props.vehicle.locations[0].lat,
+                lng: this.props.vehicle.locations[0].lng,
             },
-            marker: {
-                lat: 26.79,
-                lng: 82.19,
-            },
-            zoom: 9
+            zoom: 11
         }
     }
 
 
 
 
+    refmarker = createRef()
 
 
     updatePosition = () => {
         const marker = this.refmarker.current
+        //console.log(marker.leafletElement.getLatLng())
         const config = {
             headers: { Authorization: `bearer ${this.props.token}` }
         };
-        console.log(this.props.token);
+        //console.log(this.props.token);
         if (marker != null) {
             axios({
                 method: 'put',
-                url: SERVERURL + `vehicles/${marker.props.id}`,
+                url: SERVERURL + `vehicles/${this.props.vehicle._id}/locations/${marker.props.id}`,
                 data: marker.leafletElement.getLatLng(),
                 headers: { Authorization: `bearer ${this.props.token}` }
             })
                 .then(res => {
-                    console.log(res);
-                    console.log(res.data);
-                    this.setState({
-                        marker: marker.leafletElement.getLatLng(),
-                    })
+                    this.props.setSingleVehicle(res.data)
                 })
         }
     }
 
 
 
-    componentDidMount() {
-        console.log(this.props)
-    }
 
     render() {
         const position = [this.state.center.lat, this.state.center.lng]
-        const markerPosition = [this.state.marker.lat, this.state.marker.lng]
+        const polyline = this.props.vehicle.locations.map((location) => {
+            return [location.lat, location.lng];
+        })
+
+        const allVehicles = this.props.vehicle.locations.map((location) => {
+            return (
+                <div
+                    onClick={this.handleClick}>
+                    <Marker
+                        id={location._id}
+                        draggable={true}
+                        onDragend={this.updatePosition}
+                        onclick={this.handleMarkerClick}
+                        icon={iconPerson}
+                        position={[location.lat, location.lng]}
+                        ref={this.refmarker}>
+                        <Tooltip>
+                            <span>
+                                <b>Timeslot: </b>{new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', year: 'numeric', month: 'short', day: '2-digit' }).format(new Date(Date.parse(location.timeSlot)))}
+                            </span>
+                        </Tooltip>
+                    </Marker>
+
+                    <Polyline color="lime" positions={polyline} />
+                </div>
+            );
+        });
 
 
         return (
             <div className="container">
+                <div className="row">
+                    <div className='col-12 d-flex justify-content-center bg-success text-white mx-auto'>
+                        <span className="h4">Vehicle Id: {this.props.vehicle.vehicleId}</span>
+                    </div>
+                </div>
                 <div className="row">
                     <div className='col-12'>
                         <Map className='map' center={position} zoom={this.state.zoom}>
@@ -89,7 +111,7 @@ class VehicleRouteComponent extends Component {
                                 attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                             />
-
+                            {allVehicles}
                         </Map>
                     </div>
                 </div>

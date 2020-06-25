@@ -7,6 +7,7 @@ import { Router, Switch, Route, Redirect } from 'react-router-dom';
 import axios from 'axios';
 import { SERVERURL } from '../config';
 import history from './history';
+import https from 'https';
 
 
 class Main extends Component {
@@ -16,13 +17,13 @@ class Main extends Component {
 
     this.setToken = this.setToken.bind(this);
     this.setVehicles = this.setVehicles.bind(this);
+    this.setSingleVehicle = this.setSingleVehicle.bind(this);
 
     this.state = {
       token: '',
       vehicles: []
     };
   }
-
 
   setToken(token) {
     this.setState({
@@ -34,13 +35,24 @@ class Main extends Component {
       headers: { Authorization: `bearer ${this.state.token}` }
     })
       .then(res => {
-        console.log("Map Component Did Mount");
-        console.log(res.data);
         this.setVehicles(res.data);
       })
   }
 
   setVehicles(vehicles) {
+    this.setState({
+      vehicles: vehicles
+    })
+  }
+
+  setSingleVehicle(vehicle){
+    let vehicles = this.state.vehicles
+    for (var i in vehicles) {
+      if (vehicles[i]._id == vehicle._id) {
+        vehicles[i] = vehicle;
+         break; //Stop this loop, we found it!
+      }
+    }
     this.setState({
       vehicles: vehicles
     })
@@ -61,7 +73,11 @@ class Main extends Component {
 
     const VehicleWithId = ({ match }) => {
       return (
-        <VehicleRouteComponent match={match}/>
+        <VehicleRouteComponent
+          token={this.state.token}
+          vehicle={this.state.vehicles.filter((vehicle) => vehicle._id === (match.params.vehicleId))[0]}
+          setSingleVehicle = {this.setSingleVehicle}
+        />
       )
     }
 
