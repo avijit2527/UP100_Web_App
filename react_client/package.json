@@ -21,7 +21,7 @@
     "reactstrap": "5.0.0"
   },
   "scripts": {
-    "start": "PORT=5002 react-scripts start",
+    "start": "PORT=5003 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
