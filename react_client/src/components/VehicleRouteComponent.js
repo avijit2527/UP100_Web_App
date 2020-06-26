@@ -40,23 +40,19 @@ class VehicleRouteComponent extends Component {
 
 
 
-    refmarker = createRef()
 
-
-    updatePosition = () => {
-        const marker = this.refmarker.current
-        console.log(this.props.vehicle._id)
-        console.log(marker.props.id)
-        console.log(marker)
+    // Create different refs for each vehicle
+    updatePosition = (e) => {
         const config = {
             headers: { Authorization: `bearer ${this.props.token}` }
         };
-        //console.log(this.props.token);
-        if (marker != null) {
+        console.log(e.target.options.id);
+        console.log(e.target._latlng);
+        if (e != null) {
             axios({
                 method: 'put',
-                url: SERVERURL + `vehicles/${this.props.vehicle._id}/locations/${marker.props.id}`,
-                data: marker.leafletElement.getLatLng(),
+                url: SERVERURL + `vehicles/${this.props.vehicle._id}/locations/${e.target.options.id}`,
+                data: e.target._latlng,
                 headers: { Authorization: `bearer ${this.props.token}` }
             })
                 .then(res => {
@@ -86,7 +82,7 @@ class VehicleRouteComponent extends Component {
                         onclick={this.handleMarkerClick}
                         icon={iconPerson}
                         position={[location.lat, location.lng]}
-                        ref={this.refmarker}>
+                        >
                         <Tooltip>
                             <span>
                                 <b>Timeslot: </b>{new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', year: 'numeric', month: 'short', day: '2-digit' }).format(new Date(Date.parse(location.timeSlot)))}
