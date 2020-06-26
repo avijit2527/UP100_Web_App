@@ -81,22 +81,23 @@ class MapComponent extends Component {
         const allVehicles = this.props.vehicles.map((vehicle) => {
             //console.log(vehicle);
             return (
-                <div 
-                onClick={this.handleClick}>
+                <div
+                    key={vehicle._id}
+                    onClick={this.handleClick}>
                     <Marker
                         id={vehicle._id}
                         draggable={false}
                         onDragend={this.updatePosition}
-                        onclick= {this.handleMarkerClick}
+                        onclick={this.handleMarkerClick}
                         icon={iconPerson}
                         position={[vehicle.lat, vehicle.lng]}
                     >
-                       <Tooltip> 
-                           <span>
-                               <b>Vehicle Id:</b> {vehicle.vehicleId} <br />
-                               <b>Timeslot: </b>{new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', year: 'numeric', month: 'short', day:'2-digit'}).format(new Date(Date.parse(vehicle.timeSlot)))}
-                           </span>
-                       </Tooltip>
+                        <Tooltip>
+                            <span>
+                                <b>Vehicle Id:</b> {vehicle.vehicleId} <br />
+                                <b>Timeslot: </b>{new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', year: 'numeric', month: 'short', day: '2-digit' }).format(new Date(Date.parse(vehicle.timeSlot)))}
+                            </span>
+                        </Tooltip>
                     </Marker>
                 </div>
             );

@@ -77,6 +77,7 @@ class VehicleRouteComponent extends Component {
         const allVehicles = this.props.vehicle.locations.map((location) => {
             return (
                 <div
+                    key={location._id}
                     onClick={this.handleClick}>
                     <Marker
                         id={location._id}
