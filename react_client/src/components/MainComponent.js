@@ -51,7 +51,7 @@ class Main extends Component {
       if (vehicles[i]._id == vehicle._id) {
         vehicles[i] = vehicle;
          break; //Stop this loop, we found it!
-      }
+      } 
     }
     this.setState({
       vehicles: vehicles

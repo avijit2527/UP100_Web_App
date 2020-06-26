@@ -45,7 +45,9 @@ class VehicleRouteComponent extends Component {
 
     updatePosition = () => {
         const marker = this.refmarker.current
-        //console.log(marker.leafletElement.getLatLng())
+        console.log(this.props.vehicle._id)
+        console.log(marker.props.id)
+        console.log(marker)
         const config = {
             headers: { Authorization: `bearer ${this.props.token}` }
         };
