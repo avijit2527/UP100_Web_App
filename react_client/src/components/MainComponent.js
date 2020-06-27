@@ -17,12 +17,41 @@ class Main extends Component {
 
     this.setToken = this.setToken.bind(this);
     this.setVehicles = this.setVehicles.bind(this);
+    this.setVehiclesZoom = this.setVehiclesZoom.bind(this);
     this.setSingleVehicle = this.setSingleVehicle.bind(this);
 
     this.state = {
       token: '',
-      vehicles: []
+      vehicles: [],
+      vehiclesZoom: []
     };
+  }
+
+
+  setZoom = (zoom, vehicleId) => {
+    let vehiclesZoom = this.state.vehiclesZoom
+    for (var i in vehiclesZoom) {
+      if (vehiclesZoom[i]._id == vehicleId) {
+        vehiclesZoom[i].zoom = zoom;
+        break; //Stop this loop, we found it!
+      }
+    }
+    this.setState({
+      vehiclesZoom: vehiclesZoom
+    })
+  }
+
+  setCenter = (latlng, vehicleId) => {
+    let vehiclesZoom = this.state.vehiclesZoom
+    for (var i in vehiclesZoom) {
+      if (vehiclesZoom[i]._id == vehicleId) {
+        vehiclesZoom[i].center = latlng;
+        break; //Stop this loop, we found it!
+      }
+    }
+    this.setState({
+      vehiclesZoom: vehiclesZoom
+    })
   }
 
   setToken(token) {
@@ -36,6 +65,7 @@ class Main extends Component {
     })
       .then(res => {
         this.setVehicles(res.data);
+        this.setVehiclesZoom(res.data);
       })
   }
 
@@ -45,13 +75,30 @@ class Main extends Component {
     })
   }
 
-  setSingleVehicle(vehicle){
+  setVehiclesZoom(vehicles) {
+    let vehiclesCopy = [...vehicles]
+    vehiclesCopy = vehiclesCopy.map(vehicle => {
+      return {
+        _id: vehicle._id,
+        zoom: 11,
+        center: {
+          lat: vehicle.locations[0].lat,
+          lng: vehicle.locations[0].lng,
+        }
+      }
+    })
+    this.setState({
+      vehiclesZoom: vehiclesCopy
+    })
+  }
+
+  setSingleVehicle(vehicle) {
     let vehicles = this.state.vehicles
     for (var i in vehicles) {
       if (vehicles[i]._id == vehicle._id) {
         vehicles[i] = vehicle;
-         break; //Stop this loop, we found it!
-      } 
+        break; //Stop this loop, we found it!
+      }
     }
     this.setState({
       vehicles: vehicles
@@ -76,7 +123,10 @@ class Main extends Component {
         <VehicleRouteComponent
           token={this.state.token}
           vehicle={this.state.vehicles.filter((vehicle) => vehicle._id === (match.params.vehicleId))[0]}
-          setSingleVehicle = {this.setSingleVehicle}
+          vehiclesZoom={this.state.vehiclesZoom.filter((vehicle) => vehicle._id === (match.params.vehicleId))[0]}
+          setSingleVehicle={this.setSingleVehicle}
+          setZoom={this.setZoom}
+          setCenter={this.setCenter}
         />
       )
     }

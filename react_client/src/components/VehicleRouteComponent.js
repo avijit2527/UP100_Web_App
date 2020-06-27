@@ -27,14 +27,6 @@ class VehicleRouteComponent extends Component {
         super(props);
 
 
-        this.state = {
-
-            center: {
-                lat: this.props.vehicle.locations[0].lat,
-                lng: this.props.vehicle.locations[0].lng,
-            },
-            zoom: 11
-        }
     }
 
 
@@ -46,7 +38,6 @@ class VehicleRouteComponent extends Component {
         const config = {
             headers: { Authorization: `bearer ${this.props.token}` }
         };
-        console.log(this.mapRef);
         if (e != null) {
             axios({
                 method: 'put',
@@ -61,14 +52,12 @@ class VehicleRouteComponent extends Component {
     }
 
     updateOnZoom = (zoom) => {
-        console.log(zoom);
         this.setState({
             zoom: zoom
         })
     }
 
     updateOnMove = (latlng) => {
-        console.log(latlng.lat);
         this.setState({
             center: latlng
         })
@@ -77,7 +66,7 @@ class VehicleRouteComponent extends Component {
 
 
     render() {
-        const position = [this.state.center.lat, this.state.center.lng]
+        const position = [this.props.vehiclesZoom.center.lat, this.props.vehiclesZoom.center.lng]
         const polyline = this.props.vehicle.locations.map((location) => {
             return [location.lat, location.lng];
         })
@@ -117,9 +106,9 @@ class VehicleRouteComponent extends Component {
                 </div>
                 <div className="row">
                     <div className='col-12'>
-                        <Map className='map' center={position} zoom={this.state.zoom} ref={this.mapRef} 
-                        onzoomend={() => this.updateOnZoom(this.mapRef.current.leafletElement.getZoom())}
-                        onmoveend = {() => this.updateOnMove(this.mapRef.current.leafletElement.getCenter())}
+                        <Map className='map' center={position} zoom={this.props.vehiclesZoom.zoom} ref={this.mapRef} 
+                        onzoomend={() => this.props.setZoom(this.mapRef.current.leafletElement.getZoom(), this.props.vehicle._id)}
+                        onmoveend = {() => this.props.setCenter(this.mapRef.current.leafletElement.getCenter(), this.props.vehicle._id)}
                         >
                             <TileLayer
                                 attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
