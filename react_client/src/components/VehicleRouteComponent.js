@@ -1,10 +1,13 @@
 import React, { Component, createRef } from 'react'
 import 'leaflet/dist/leaflet.css';
 import '../map.css';
+import '../App.css';
 import L from 'leaflet';
 import { Map, TileLayer, Marker, Tooltip, Polyline } from 'react-leaflet';
 import axios from 'axios';
 import { SERVERURL } from '../config';
+import { Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import { Link } from 'react-router-dom'
 
 
 const iconPerson = new L.Icon({
@@ -83,7 +86,7 @@ class VehicleRouteComponent extends Component {
                         onclick={this.handleMarkerClick}
                         icon={iconPerson}
                         position={[location.lat, location.lng]}
-                        >
+                    >
                         <Tooltip>
                             <span>
                                 <b>Timeslot: </b>{new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', year: 'numeric', month: 'short', day: '2-digit' }).format(new Date(Date.parse(location.timeSlot)))}
@@ -100,15 +103,14 @@ class VehicleRouteComponent extends Component {
         return (
             <div className="container">
                 <div className="row">
-                    <div className='col-12 d-flex justify-content-center bg-success text-white mx-auto'>
-                        <span className="h4">Vehicle Id: {this.props.vehicle.vehicleId}</span>
-                    </div>
-                </div>
-                <div className="row">
                     <div className='col-12'>
-                        <Map className='map' center={position} zoom={this.props.vehiclesZoom.zoom} ref={this.mapRef} 
-                        onzoomend={() => this.props.setZoom(this.mapRef.current.leafletElement.getZoom(), this.props.vehicle._id)}
-                        onmoveend = {() => this.props.setCenter(this.mapRef.current.leafletElement.getCenter(), this.props.vehicle._id)}
+                        <Breadcrumb className='breadcrumb'>
+                            <BreadcrumbItem><Link to='/home'>Home</Link></BreadcrumbItem>
+                            <BreadcrumbItem active>Vehicle {this.props.vehicle.vehicleId}</BreadcrumbItem>
+                        </Breadcrumb>
+                        <Map className='map' center={position} zoom={this.props.vehiclesZoom.zoom} ref={this.mapRef}
+                            onzoomend={() => this.props.setZoom(this.mapRef.current.leafletElement.getZoom(), this.props.vehicle._id)}
+                            onmoveend={() => this.props.setCenter(this.mapRef.current.leafletElement.getCenter(), this.props.vehicle._id)}
                         >
                             <TileLayer
                                 attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
