@@ -38,7 +38,7 @@ class VehicleRouteComponent extends Component {
     }
 
 
-
+    mapRef = createRef();
 
 
     // Create different refs for each vehicle
@@ -46,8 +46,7 @@ class VehicleRouteComponent extends Component {
         const config = {
             headers: { Authorization: `bearer ${this.props.token}` }
         };
-        console.log(e.target.options.id);
-        console.log(e.target._latlng);
+        console.log(this.mapRef);
         if (e != null) {
             axios({
                 method: 'put',
@@ -61,6 +60,19 @@ class VehicleRouteComponent extends Component {
         }
     }
 
+    updateOnZoom = (zoom) => {
+        console.log(zoom);
+        this.setState({
+            zoom: zoom
+        })
+    }
+
+    updateOnMove = (latlng) => {
+        console.log(latlng.lat);
+        this.setState({
+            center: latlng
+        })
+    }
 
 
 
@@ -105,7 +117,10 @@ class VehicleRouteComponent extends Component {
                 </div>
                 <div className="row">
                     <div className='col-12'>
-                        <Map className='map' center={position} zoom={this.state.zoom}>
+                        <Map className='map' center={position} zoom={this.state.zoom} ref={this.mapRef} 
+                        onzoomend={() => this.updateOnZoom(this.mapRef.current.leafletElement.getZoom())}
+                        onmoveend = {() => this.updateOnMove(this.mapRef.current.leafletElement.getCenter())}
+                        >
                             <TileLayer
                                 attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
