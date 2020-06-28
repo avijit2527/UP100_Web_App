@@ -4,6 +4,6 @@ module.exports = {
     script: "./node_modules/react-scripts/scripts/start.js",
     watch: true,
     increment_var: 'PORT',
-    env: { "PORT": 3002, "NODE_ENV": "development" }
+    env: { "PORT": 3002, "NODE_ENV": "production" }
   }]
 }

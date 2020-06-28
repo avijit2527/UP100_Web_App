@@ -115,7 +115,7 @@ class Header extends Component {
                     <div className="container">
                         <div className="row row-header">
                             <div className="col-12 col-sm-6">
-                                <h1 className='align-center'>UP 100 Control Room</h1>
+                                <h1 className='align-center'>UP 112 Control Room</h1>
                                 <h4>Maintain Law and order</h4>
                             </div>
                             <div className="col-12 col-sm-6">

@@ -34,7 +34,7 @@ address {
 }
 
 .up100_image {
-    width: 100%;
+    width: 80%;
     height: 100px;
     display: block;
 }
@@ -44,3 +44,7 @@ address {
     color: white;
     background-color: #C1A0F2;
 }
+
+.awesome-marker-icon-transparent {
+    background: none;
+  }

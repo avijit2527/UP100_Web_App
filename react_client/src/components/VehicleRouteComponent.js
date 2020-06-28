@@ -7,7 +7,9 @@ import { Map, TileLayer, Marker, Tooltip, Polyline } from 'react-leaflet';
 import axios from 'axios';
 import { SERVERURL } from '../config';
 import { Breadcrumb, BreadcrumbItem } from 'reactstrap';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import PolylineDecorator from './PolylineDecorator'
+
 
 
 const iconPerson = new L.Icon({
@@ -23,6 +25,19 @@ const iconPerson = new L.Icon({
 });
 
 
+
+
+const arrow = [
+    {
+      offset: "0%",
+      repeat: 100,
+      symbol: L.Symbol.arrowHead({
+        pixelSize: 10,
+        polygon: false,
+        pathOptions: { stroke: true }
+      })
+    }
+  ];
 
 class VehicleRouteComponent extends Component {
 
@@ -66,6 +81,7 @@ class VehicleRouteComponent extends Component {
         })
     }
 
+    
 
 
     render() {
@@ -86,6 +102,7 @@ class VehicleRouteComponent extends Component {
                         onclick={this.handleMarkerClick}
                         icon={iconPerson}
                         position={[location.lat, location.lng]}
+                        opacity={0.5}
                     >
                         <Tooltip>
                             <span>
@@ -93,8 +110,7 @@ class VehicleRouteComponent extends Component {
                             </span>
                         </Tooltip>
                     </Marker>
-
-                    <Polyline color="lime" positions={polyline} />
+                    <PolylineDecorator patterns={arrow} positions={polyline} />
                 </div>
             );
         });
