@@ -11,6 +11,7 @@ var config = require('./config');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var crimesRouter = require('./routes/crimes');
 
 const vehicleRouter = require('./routes/vehicles');
 
@@ -50,6 +51,7 @@ app.use(passport.initialize());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/crimes', crimesRouter);
 
 
 app.use(express.static(path.join(__dirname, 'public')));

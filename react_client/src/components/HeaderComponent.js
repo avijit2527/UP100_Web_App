@@ -69,11 +69,11 @@ class Header extends Component {
                 "password": this.state.password
             })
             .then(res => {
-                console.log(res.data.token);
+                //console.log(res.data.token);
                 if (res.data.token) {
-                    this.props.setToken(res.data.token)
+                    this.props.setToken(res.data.token,res.data.user)
                 }
-                console.log(res.data);
+                //console.log(res.data);
             })
             .catch(err => alert("Login Failed! Please Try Again."));
         event.preventDefault();

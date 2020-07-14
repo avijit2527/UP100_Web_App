@@ -45,6 +45,12 @@ address {
     background-color: #C1A0F2;
 }
 
+.inputgroup {
+    margin: 0px;
+    color: white;
+    background-color: #cbb1f3;
+}
+
 .awesome-marker-icon-transparent {
     background: none;
   }

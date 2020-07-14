@@ -22,8 +22,11 @@ class Main extends Component {
 
     this.state = {
       token: '',
+      user: null,
       vehicles: [],
-      vehiclesZoom: []
+      vehiclesZoom: [],
+      crimes: [],
+      crimesForHeatmap: []
     };
   }
 
@@ -54,9 +57,10 @@ class Main extends Component {
     })
   }
 
-  setToken(token) {
+  setToken(token, user) {
     this.setState({
-      token: token
+      token: token,
+      user: user
     })
     axios({
       method: 'get',
@@ -66,6 +70,23 @@ class Main extends Component {
       .then(res => {
         this.setVehicles(res.data);
         this.setVehiclesZoom(res.data);
+      })
+
+    axios({
+      method: 'get',
+      url: SERVERURL + `crimes/`,
+      params: { region: user.zone },
+      headers: { Authorization: `bearer ${this.state.token}` }
+    })
+      .then(res => {
+        let crimesForHeatmap = res.data.map((crime) => {
+          return [crime.lat, crime.lng, "400"];
+        })
+        this.setState({
+          crimes: res.data,
+          crimesForHeatmap : crimesForHeatmap
+        })
+        //console.log(this.state.crimes)
       })
   }
 
@@ -114,6 +135,7 @@ class Main extends Component {
         <Home
           token={this.state.token}
           vehicles={this.state.vehicles}
+          crimesForHeatmap={this.state.crimesForHeatmap}
         />
       );
     }

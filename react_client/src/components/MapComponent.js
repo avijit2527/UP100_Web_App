@@ -2,12 +2,15 @@ import React, { Component, createRef } from 'react'
 import 'leaflet/dist/leaflet.css';
 import '../map.css';
 import '../App.css';
+import '../switch.css';
 import L from 'leaflet';
 import { Map, TileLayer, Marker, Tooltip } from 'react-leaflet';
 import axios from 'axios';
 import { SERVERURL } from '../config';
 import history from './history';
-import { Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import { InputGroup, Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import HeatmapLayer from 'react-leaflet-heatmap-layer';
+import FullscreenControl from 'react-leaflet-fullscreen';
 import { Link } from 'react-router-dom'
 
 
@@ -33,7 +36,7 @@ class MapComponent extends Component {
 
 
         this.state = {
-
+            showHeatmap: false,
             center: {
                 lat: 26.7,
                 lng: 82.0,
@@ -43,7 +46,11 @@ class MapComponent extends Component {
     }
 
 
-
+    handleHeatmapCheck = event => {
+        this.setState({
+            showHeatmap: !this.state.showHeatmap
+        });
+    }
 
 
     handleMarkerClick = event => {
@@ -81,6 +88,7 @@ class MapComponent extends Component {
 
     render() {
         const position = [this.state.center.lat, this.state.center.lng]
+        const addressPoints = this.props.crimesForHeatmap;
         const allVehicles = this.props.vehicles.map((vehicle) => {
             //console.log(vehicle);
             return (
@@ -112,12 +120,34 @@ class MapComponent extends Component {
                     <Breadcrumb className='breadcrumb'>
                         <BreadcrumbItem active>Home</BreadcrumbItem>
                     </Breadcrumb>
+                    <InputGroup  className='inputgroup'>
+                        <label  htmlFor={`react-switch-new`}><span className = "text-muted ml-3 m-1 text-center">Show Heatmap</span></label>
+                        <input
+                            className="react-switch-checkbox"
+                            id={`react-switch-new`}
+                            type="checkbox"
+                            defaultChecked={this.state.showHeatmap}
+                            onChange={this.handleHeatmapCheck}
+                        />
+                        <label
+                            className="react-switch-label m-1"
+                            htmlFor={`react-switch-new`}
+                        >
+                            <span className={`react-switch-button`} />
+                        </label>
+                    </InputGroup>
                     <Map className='map' center={position} zoom={this.state.zoom}>
                         <TileLayer
                             attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         />
 
+                        <FullscreenControl position="topright" />
+                        {this.state.showHeatmap && <HeatmapLayer
+                            points={addressPoints}
+                            longitudeExtractor={m => m[1]}
+                            latitudeExtractor={m => m[0]}
+                            intensityExtractor={m => parseFloat(m[2])} />}
                         {allVehicles}
                     </Map>
                 </div>

@@ -8,7 +8,8 @@ function Home(props) {
         <div className="container">
             <MapComponent 
             token={props.token}
-            vehicles = {props.vehicles}        
+            vehicles = {props.vehicles}   
+            crimesForHeatmap = {props.crimesForHeatmap}     
             />
         </div>
     );

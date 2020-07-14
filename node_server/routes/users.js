@@ -21,7 +21,7 @@ router.get('/', cors.corsWithOptions, authenticate.verifyUser, function (req, re
 });
 
 router.post('/signup', cors.corsWithOptions, (req, res, next) => {
-  User.register(new User({ username: req.body.username }), req.body.password, (err, user) => {
+  User.register(new User({ username: req.body.username, zone : req.body.zone }), req.body.password, (err, user) => {
     if (err) {
       res.statusCode = 500;
       res.setHeader('Content-Type', 'application/json');
@@ -57,23 +57,23 @@ router.post('/login', cors.corsWithOptions, (req, res, next) => {
 
     if (err)
       return next(err);
-    if(!user) {
+    if (!user) {
       res.statusCode = 401;
       res.setHeader('Content-Type', 'application/json');
       res.json({ success: false, status: 'Login Unsuccessful!', err: 'could not log in user!' });
     }
     req.logIn(user, (err) => {
-      if(err) {
+      if (err) {
         res.statusCode = 401;
         res.setHeader('Content-Type', 'application/json');
-        res.json({ success: false,status: 'Login Unsuccessful!', err: info });
+        res.json({ success: false, status: 'Login Unsuccessful!', err: info });
       }
     })
-    
-  var token = authenticate.getToken({ _id: req.user._id });
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'application/json');
-  res.json({ success: true ,status: 'Login successful!', token: token  });
+
+    var token = authenticate.getToken({ _id: req.user._id });
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json');
+    res.json({ success: true, status: 'Login successful!', token: token, user:user });
 
   })(req, res, next);
 
@@ -103,22 +103,22 @@ router.get('/facebook/token', passport.authenticate('facebook-token'), (req, res
 });
 
 router.get('/checkJWTtoken', cors.corsWithOptions, (req, res) => {
-  passport.authenticate('jwt', {session: false}, (err, user, info) => {
+  passport.authenticate('jwt', { session: false }, (err, user, info) => {
     if (err)
       return next(err);
-    
+
     if (!user) {
       res.statusCode = 401;
       res.setHeader('Content-Type', 'application/json');
-      return res.json({status: 'JWT invalid!', success: false, err: info});
+      return res.json({ status: 'JWT invalid!', success: false, err: info });
     }
     else {
       res.statusCode = 200;
       res.setHeader('Content-Type', 'application/json');
-      return res.json({status: 'JWT valid!', success: true, user: user});
+      return res.json({ status: 'JWT valid!', success: true, user: user });
 
     }
-  }) (req, res);
+  })(req, res);
 });
 
 
