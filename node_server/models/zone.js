@@ -4,29 +4,29 @@ const Schema = mongoose.Schema;
 
 
 
-const crimeSchema = new Schema({
-    eventId: {
+const zoneSchema = new Schema({
+    name: {
         type: String,
         unique: true,
         required: true
     },
-    crimeTime:  {
-        type: Date,
-        required: true
-    },
-    type: {
+    zone:  {
         type: String,
         required: true
     },
-    zone: {
-        type: String,
-        required: true
-    },
-    lat: {
+    leftLat: {
         type: Number,
         required: true
     },
-    lng: {
+    leftLng: {
+        type: Number,
+        required: true
+    },
+    rightLat: {
+        type: Number,
+        required: true
+    },
+    rightLng: {
         type: Number,
         required: true
     }
@@ -35,6 +35,6 @@ const crimeSchema = new Schema({
 });
 
 
-var Crimes = mongoose.model('Crime', crimeSchema);
+var Zones = mongoose.model('Zone', zoneSchema);
 
-module.exports = Crimes;
+module.exports = Zones;

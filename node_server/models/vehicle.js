@@ -28,13 +28,17 @@ const vehicleSchema = new Schema({
     lat: {
         type: Number,
         required: true
-    },
+    }, 
     lng: {
         type: Number,
         required: true
     },
     timeSlot:  {
         type: Date,
+        required: true
+    },
+    zone: {
+        type: String,
         required: true
     },
     locations: [locationSchema]

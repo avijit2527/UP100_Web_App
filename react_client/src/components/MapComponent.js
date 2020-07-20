@@ -11,7 +11,7 @@ import history from './history';
 import { InputGroup, Breadcrumb, BreadcrumbItem } from 'reactstrap';
 import HeatmapLayer from 'react-leaflet-heatmap-layer';
 import FullscreenControl from 'react-leaflet-fullscreen';
-import { Link } from 'react-router-dom'
+import HeatMapComponent from "./HeatMapComponent";
 
 
 const iconPerson = new L.Icon({
@@ -85,10 +85,8 @@ class MapComponent extends Component {
 
 
 
-
     render() {
         const position = [this.state.center.lat, this.state.center.lng]
-        const addressPoints = this.props.crimesForHeatmap;
         const allVehicles = this.props.vehicles.map((vehicle) => {
             //console.log(vehicle);
             return (
@@ -143,11 +141,7 @@ class MapComponent extends Component {
                         />
 
                         <FullscreenControl position="topright" />
-                        {this.state.showHeatmap && <HeatmapLayer
-                            points={addressPoints}
-                            longitudeExtractor={m => m[1]}
-                            latitudeExtractor={m => m[0]}
-                            intensityExtractor={m => parseFloat(m[2])} />}
+                        {this.state.showHeatmap && <HeatMapComponent crimesForHeatmap = {this.props.crimesForHeatmap}/>}
                         {allVehicles}
                     </Map>
                 </div>

@@ -75,7 +75,7 @@ class Header extends Component {
                 }
                 //console.log(res.data);
             })
-            .catch(err => alert("Login Failed! Please Try Again."));
+            .catch(err => alert("Login Failed! Please Try Again." + err));
         event.preventDefault();
     }
 

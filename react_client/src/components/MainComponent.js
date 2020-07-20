@@ -26,7 +26,8 @@ class Main extends Component {
       vehicles: [],
       vehiclesZoom: [],
       crimes: [],
-      crimesForHeatmap: []
+      crimesForHeatmap: [],
+      zone: null
     };
   }
 
@@ -64,30 +65,51 @@ class Main extends Component {
     })
     axios({
       method: 'get',
-      url: SERVERURL + `vehicles/`,
+      url: SERVERURL + `zones/`,
+      params: { zone: user.zone },
       headers: { Authorization: `bearer ${this.state.token}` }
     })
       .then(res => {
-        this.setVehicles(res.data);
-        this.setVehiclesZoom(res.data);
+        console.log(res.data[0]);
+        this.setState({
+          zone: res.data[0]
+        })
+        axios({
+          method: 'get',
+          url: SERVERURL + `vehicles/`,
+          params: { zone: user.zone },
+          headers: { Authorization: `bearer ${this.state.token}` }
+        })
+          .then(res => {
+            this.setVehicles(res.data);
+            this.setVehiclesZoom(res.data);
+            axios({
+              method: 'get',
+              url: SERVERURL + `crimes/`,
+              params: {
+                zone: user.zone,
+                latlte: this.state.zone.leftLat,
+                latgte: this.state.zone.rightLat,
+                lnggte: this.state.zone.leftLng,
+                lnglte: this.state.zone.rightLng
+              },
+              headers: { Authorization: `bearer ${this.state.token}` }
+            })
+              .then(res => {
+                console.log(res);
+                let crimesForHeatmap = res.data.map((crime) => {
+                  return [crime.lat, crime.lng, "400"];
+                })
+                this.setState({
+                  crimes: res.data,
+                  crimesForHeatmap: crimesForHeatmap
+                })
+                //console.log(this.state.crimes)
+              })
+          })
+
       })
 
-    axios({
-      method: 'get',
-      url: SERVERURL + `crimes/`,
-      params: { region: user.zone },
-      headers: { Authorization: `bearer ${this.state.token}` }
-    })
-      .then(res => {
-        let crimesForHeatmap = res.data.map((crime) => {
-          return [crime.lat, crime.lng, "400"];
-        })
-        this.setState({
-          crimes: res.data,
-          crimesForHeatmap : crimesForHeatmap
-        })
-        //console.log(this.state.crimes)
-      })
   }
 
   setVehicles(vehicles) {

@@ -15,13 +15,13 @@ vehicleRouter.route('/')
         res.sendStatus(200);
     })
     .get(cors.cors, authenticate.verifyUser,  (req, res, next) => {
-        Vehicles.find({})
+        Vehicles.find(req.query)
             .then((vehicles) => {
                 res.statusCode = 200;
                 res.setHeader('Content-Type', 'application/json');
                 res.json(vehicles);
             }, (err) => next(err))
-            .catch((err) => next(err));
+            .catch((err) => next(err)); 
     })
     .post(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
         Vehicles.create(req.body)

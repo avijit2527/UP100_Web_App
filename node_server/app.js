@@ -17,6 +17,7 @@ const vehicleRouter = require('./routes/vehicles');
 
 
 const mongoose = require('mongoose');
+const zonesRouter = require('./routes/zones');
 
 
 const url = config.mongoUrl;
@@ -52,6 +53,7 @@ app.use(passport.initialize());
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/crimes', crimesRouter);
+app.use('/zones', zonesRouter);
 
 
 app.use(express.static(path.join(__dirname, 'public')));
