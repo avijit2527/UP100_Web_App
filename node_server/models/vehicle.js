@@ -22,7 +22,6 @@ const locationSchema = new Schema({
 const vehicleSchema = new Schema({
     vehicleId: {
         type: String,
-        unique: true,
         required: true
     },
     lat: {
@@ -46,7 +45,7 @@ const vehicleSchema = new Schema({
     timestamps: true
 });
 
-
+vehicleSchema.index({ vehicleId: 1, zone: 1}, { unique: true });
 var Vehicles = mongoose.model('Vehicle', vehicleSchema);
 
 module.exports = Vehicles;

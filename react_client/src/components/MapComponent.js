@@ -86,7 +86,10 @@ class MapComponent extends Component {
 
 
     render() {
-        const position = [this.state.center.lat, this.state.center.lng]
+        let position = [this.state.center.lat, this.state.center.lng];
+        if(this.props.vehicles.length !=0){
+            position = [this.props.vehicles[0].locations[0].lat,this.props.vehicles[0].locations[0].lng];
+        } 
         const allVehicles = this.props.vehicles.map((vehicle) => {
             //console.log(vehicle);
             return (
@@ -99,7 +102,7 @@ class MapComponent extends Component {
                         onDragend={this.updatePosition}
                         onclick={this.handleMarkerClick}
                         icon={iconPerson}
-                        position={[vehicle.lat, vehicle.lng]}
+                        position={[vehicle.locations[0].lat, vehicle.locations[0].lng]}
                     >
                         <Tooltip>
                             <span>
