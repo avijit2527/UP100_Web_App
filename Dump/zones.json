@@ -1,0 +1,35 @@
+[{
+  "_id": {
+    "$oid": "5f15eee9a8310f2f5493ed8c"
+  },
+  "name": "Prayagraj",
+  "zone": "ALD",
+  "leftLat": 25.82,
+  "leftLng": 81.34,
+  "rightLat": 25.15,
+  "rightLng": 82.35,
+  "createdAt": {
+    "$date": "2020-07-20T19:22:17.988Z"
+  },
+  "updatedAt": {
+    "$date": "2020-07-20T19:22:17.988Z"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5f1608f49792cb155444e7ab"
+  },
+  "name": "Kanpur",
+  "zone": "KNC",
+  "leftLat": 26.9,
+  "leftLng": 79.74,
+  "rightLat": 25.76,
+  "rightLng": 80.75,
+  "createdAt": {
+    "$date": "2020-07-20T21:13:25.011Z"
+  },
+  "updatedAt": {
+    "$date": "2020-07-20T21:13:25.011Z"
+  },
+  "__v": 0
+}]
