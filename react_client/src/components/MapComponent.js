@@ -10,7 +10,7 @@ import { SERVERURL } from '../config';
 import history from './history';
 import { InputGroup, Breadcrumb, BreadcrumbItem } from 'reactstrap';
 import HeatmapLayer from 'react-leaflet-heatmap-layer';
-import FullscreenControl from 'react-leaflet-fullscreen';
+//import FullscreenControl from 'react-leaflet-fullscreen';
 import HeatMapComponent from "./HeatMapComponent";
 
 
@@ -143,7 +143,7 @@ class MapComponent extends Component {
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         />
 
-                        <FullscreenControl position="topright" />
+                        
                         {this.state.showHeatmap && <HeatMapComponent crimesForHeatmap = {this.props.crimesForHeatmap}/>}
                         {allVehicles}
                     </Map>
