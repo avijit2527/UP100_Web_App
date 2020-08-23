@@ -15,7 +15,8 @@ class Header extends Component {
             isModalOpen: false,
             username: "",
             password: "",
-            remember: false
+            remember: false,
+            showLogin : true
         };
         this.toggleNav = this.toggleNav.bind(this);
         this.toggleModal = this.toggleModal.bind(this);
@@ -49,6 +50,13 @@ class Header extends Component {
         this.setState({ remember: e.target.value });
     }
 
+    handleLogout = () => {
+        this.props.handleLogout();
+        this.setState({
+            showLogin: true
+        })
+    }
+
 
     handleLogin(event) {
 
@@ -73,6 +81,9 @@ class Header extends Component {
                 if (res.data.token) {
                     this.props.setToken(res.data.token,res.data.user)
                 }
+                this.setState({
+                    showLogin : false
+                })
                 //console.log(res.data);
             })
             .catch(err => alert("Login Failed! Please Try Again." + err));
@@ -101,13 +112,22 @@ class Header extends Component {
                                     <NavLink className="nav-link" to='/contactus'><span className="fa fa-address-card fa-lg"></span> Contact Us</NavLink>
                                 </NavItem>
                             </Nav>
-                            <Nav className="ml-auto" navbar>
+                            {this.state.showLogin && 
+                                <Nav className="ml-auto" navbar>
                                 <NavItem>
                                     <Button outline onClick={this.toggleModal}>
                                         <span className="fa fa-sign-in fa-lg"></span> Login
                                     </Button>
+                                </NavItem> 
+                            </Nav> }
+                            {!this.state.showLogin && 
+                            <Nav className="ml-auto" navbar>
+                                <NavItem>
+                                    <Button outline onClick={this.handleLogout}>
+                                        <span className="fa fa-sign-out fa-lg"></span> Logout
+                                    </Button>
                                 </NavItem>
-                            </Nav>
+                            </Nav>}
                         </Collapse>
                     </div>
                 </Navbar>

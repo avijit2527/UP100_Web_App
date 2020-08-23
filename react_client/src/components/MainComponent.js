@@ -32,6 +32,19 @@ class Main extends Component {
   }
 
 
+  handleLogout = () => {
+    this.setState({
+      token: '',
+      user: null,
+      vehicles: [],
+      vehiclesZoom: [],
+      crimes: [],
+      crimesForHeatmap: [],
+      zone: null
+    });
+  }
+
+
   setZoom = (zoom, vehicleId) => {
     let vehiclesZoom = this.state.vehiclesZoom
     for (var i in vehiclesZoom) {
@@ -190,6 +203,7 @@ class Main extends Component {
         <Header setToken={this.setToken}
           token={this.token}
           setVehicles={this.setVehicles}
+          handleLogout = {this.handleLogout}
         />
         <Router history={history}>
           <Switch>
