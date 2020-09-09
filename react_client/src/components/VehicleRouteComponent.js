@@ -57,15 +57,32 @@ class VehicleRouteComponent extends Component {
             headers: { Authorization: `bearer ${this.props.token}` }
         };
         if (e != null) {
+            console.log(e.target._latlng);
             axios({
                 method: 'put',
                 url: SERVERURL + `vehicles/${this.props.vehicle._id}/locations/${e.target.options.id}`,
                 data: e.target._latlng,
                 headers: { Authorization: `bearer ${this.props.token}` }
             })
-                .then(res => {
-                    this.props.setSingleVehicle(res.data)
-                })
+            .then(res => {
+                this.props.setSingleVehicle(res.data)
+            });
+            var nearestLocation = {
+                "zone":"ALD",
+                location:{
+                    "type":"Point",
+                    coordinates: [e.target._latlng.lat,e.target._latlng.lng]
+                }
+            }
+            axios({
+                method: 'post',
+                url: SERVERURL + `nearestLocation`,
+                data: nearestLocation,
+                headers: { Authorization: `bearer ${this.props.token}` }
+            })
+            .then(res => {
+                this.props.setSingleVehicle(res.data)
+            });
         }
     }
 

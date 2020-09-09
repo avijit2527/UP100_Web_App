@@ -14,6 +14,7 @@ var usersRouter = require('./routes/users');
 var crimesRouter = require('./routes/crimes');
 
 const vehicleRouter = require('./routes/vehicles');
+const nearestLocationRouter = require('./routes/nearestLocations');
 
 
 const mongoose = require('mongoose');
@@ -54,6 +55,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/crimes', crimesRouter);
 app.use('/zones', zonesRouter);
+app.use('/nearestLocation', nearestLocationRouter);
 
 
 app.use(express.static(path.join(__dirname, 'public')));

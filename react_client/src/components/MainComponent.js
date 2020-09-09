@@ -83,7 +83,8 @@ class Main extends Component {
       headers: { Authorization: `bearer ${this.state.token}` }
     })
       .then(res => {
-        console.log(res.data[0]);
+        console.log("zone");
+        console.log(res.data[0].zone);
         this.setState({
           zone: res.data[0]
         })
@@ -179,6 +180,7 @@ class Main extends Component {
       return (
         <VehicleRouteComponent
           token={this.state.token}
+          zone = {this.state.zone.zone}
           vehicle={this.state.vehicles.filter((vehicle) => vehicle._id === (match.params.vehicleId))[0]}
           vehiclesZoom={this.state.vehiclesZoom.filter((vehicle) => vehicle._id === (match.params.vehicleId))[0]}
           setSingleVehicle={this.setSingleVehicle}
