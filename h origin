@@ -1,0 +1,32 @@
+[33m9adcea9[m[33m ([m[1;36mHEAD[m[33m)[m adding nearest location feature
+[33md4702f4[m config
+[33m2624132[m[33m ([m[1;31morigin/master[m[33m, [m[1;32mtemp[m[33m, [m[1;32mmaster[m[33m)[m Adding logout button
+[33m03a51be[m adding dump
+[33m328a5b5[m removing fullscreen
+[33m4bbc79b[m Adding hotspot and zone
+[33m8708966[m Introducing zones
+[33ma8d4a3a[m Adding Heatmap
+[33m8df2f20[m Solving cert issue
+[33mc9b0c2b[m Changing Config
+[33me068deb[m Arrow and Opacity of Marker Added
+[33ma91dfd2[m url
+[33m6c74dea[m Adding Breadcrumb
+[33mf68b248[m UP100 logo and Page Title added
+[33m1212cf6[m Fixing zoom and center on refresh
+[33m12ccffd[m pm2 config
+[33m17d444d[m pm2 config
+[33m5159f99[m pm2 config
+[33m34f4708[m Draggable Bug Fix
+[33m082c811[m PM2 setup url client
+[33mf10f969[m CORS Server
+[33mb6c22ea[m PM2 setup port numbers
+[33m24f9521[m Server Config
+[33m8d2204c[m Server Config
+[33mb2adf61[m Server Config
+[33mc506c7a[m Server Config
+[33m85fd968[m Location Array
+[33m134d8a5[m Adding location service serverside
+[33mcd7581d[m Routing to a new Location, tootltip
+[33mfa51279[m Login and Draggable end to end
+[33mce3cbc0[m Initial IITK Server Upload
+[33md9326e1[m Draggable Marker
