@@ -19,6 +19,9 @@ vehicleRouter.route('/')
             .then((vehicles) => {
                 res.statusCode = 200;
                 res.setHeader('Content-Type', 'application/json');
+                for(var i=0;i<vehicles.length;i++){
+                    vehicles[i].locations = vehicles[i].locations.slice(-24);
+                }
                 res.json(vehicles);
             }, (err) => next(err))
             .catch((err) => next(err)); 
