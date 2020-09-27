@@ -40,7 +40,11 @@ const vehicleSchema = new Schema({
         type: String,
         required: true
     },
-    locations: [locationSchema]
+    locations: [locationSchema],
+    locations1: [locationSchema],
+    locations2: [locationSchema],
+    locations3: [locationSchema],
+    locations4: [locationSchema]
 }, {
     timestamps: true
 });

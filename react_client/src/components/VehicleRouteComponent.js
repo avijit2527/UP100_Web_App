@@ -8,7 +8,13 @@ import axios from 'axios';
 import { SERVERURL } from '../config';
 import { Breadcrumb, BreadcrumbItem } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import PolylineDecorator from './PolylineDecorator'
+import PolylineDecorator from './PolylineDecorator';
+import Slider from '@material-ui/core/Slider';
+
+import Grid from '@material-ui/core/Grid';
+import AddCircle from '@material-ui/icons/AddCircle';
+import RemoveCircle from '@material-ui/icons/RemoveCircle';
+import { getDistance } from 'geolib';
 
 
 
@@ -58,9 +64,19 @@ class VehicleRouteComponent extends Component {
         };
         if (e != null) {
             console.log(e.target._latlng);
+            let name = "locations";
+            if(this.props.vehiclesZoom.penalty == 2){
+                name = "locations1";
+            }else if(this.props.vehiclesZoom.penalty == 3){
+                name = "locations2";
+            }else if(this.props.vehiclesZoom.penalty == 4){
+                name = "locations3";
+            }else if(this.props.vehiclesZoom.penalty == 5){
+                name = "locations4";
+            }
             axios({
                 method: 'put',
-                url: SERVERURL + `vehicles/${this.props.vehicle._id}/locations/${e.target.options.id}`,
+                url: SERVERURL + `vehicles/${this.props.vehicle._id}/${name}/${e.target.options.id}`,
                 data: e.target._latlng,
                 headers: { Authorization: `bearer ${this.props.token}` }
             })
@@ -68,7 +84,7 @@ class VehicleRouteComponent extends Component {
                 this.props.setSingleVehicle(res.data)
             });
             var nearestLocation = {
-                "zone":"ALD",
+                "zone":`${this.props.vehicle.zone}`,
                 location:{
                     "type":"Point",
                     coordinates: [e.target._latlng.lat,e.target._latlng.lng]
@@ -80,9 +96,6 @@ class VehicleRouteComponent extends Component {
                 data: nearestLocation,
                 headers: { Authorization: `bearer ${this.props.token}` }
             })
-            .then(res => {
-                this.props.setSingleVehicle(res.data)
-            });
         }
     }
 
@@ -100,14 +113,29 @@ class VehicleRouteComponent extends Component {
 
     
 
+    sliderChange = (e,val) => {
+        console.log(val);
+        this.props.setPenalty(val,this.props.vehicle._id);
+    }
+    
+    
+
 
     render() {
         const position = [this.props.vehiclesZoom.center.lat, this.props.vehiclesZoom.center.lng]
-        const polyline = this.props.vehicle.locations.map((location) => {
+        const polyline = this.props.vehiclesZoom.loc.map((location) => {
             return [location.lat, location.lng];
         })
+        let totalDistance = 0;
+        for(var i=0;i<this.props.vehiclesZoom.loc.length-1;i++){
+            let start = { latitude: this.props.vehiclesZoom.loc[i].lat, longitude: this.props.vehiclesZoom.loc[i].lng }
+            let end = { latitude: this.props.vehiclesZoom.loc[i+1].lat, longitude: this.props.vehiclesZoom.loc[i].lng }
+            totalDistance += getDistance(start,end);
+        }
 
-        const allVehicles = this.props.vehicle.locations.map((location) => {
+        console.log(this.props.vehiclesZoom);
+
+        const allVehicles = this.props.vehiclesZoom.loc.map((location) => {
             return (
                 <div
                     key={location._id}
@@ -141,6 +169,42 @@ class VehicleRouteComponent extends Component {
                             <BreadcrumbItem><Link to='/home'>Home</Link></BreadcrumbItem>
                             <BreadcrumbItem active>Vehicle {this.props.vehicle.vehicleId}</BreadcrumbItem>
                         </Breadcrumb>
+                        <div  className='inputgroup'>
+                            <div  className='row'>
+                            <div  className='col-6 text-center' style={{textDecoration: "bold", color:"green"}}>
+                                <span>Total Distance: </span>
+                                <span>{totalDistance/1000} KM</span>
+                            </div>
+                                <div  className='col-6'>
+                                    <div  className='row'>
+                                        <div className='col-12'>
+                                            <Grid container spacing={2}>
+                                                <Grid item>
+                                                    <RemoveCircle />
+                                                </Grid>
+                                                <Grid item xs>
+                                                <Slider
+                                                    defaultValue={this.props.vehiclesZoom.penalty}
+                                                    getAriaValueText={this.valuetext}
+                                                    aria-labelledby="discrete-slider-always"
+                                                    valueLabelDisplay="auto"
+                                                    step={1}
+                                                    marks={true}
+                                                    min={1}
+                                                    max={5}
+                                                    valueLabelDisplay="on"
+                                                    onChange = {this.sliderChange}
+                                                />
+                                                </Grid>
+                                                <Grid item>
+                                                    <AddCircle />
+                                                </Grid>
+                                            </Grid>                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <Map className='map' center={position} zoom={this.props.vehiclesZoom.zoom} ref={this.mapRef}
                             onzoomend={() => this.props.setZoom(this.mapRef.current.leafletElement.getZoom(), this.props.vehicle._id)}
                             onmoveend={() => this.props.setCenter(this.mapRef.current.leafletElement.getCenter(), this.props.vehicle._id)}

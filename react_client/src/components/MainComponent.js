@@ -19,6 +19,7 @@ class Main extends Component {
     this.setVehicles = this.setVehicles.bind(this);
     this.setVehiclesZoom = this.setVehiclesZoom.bind(this);
     this.setSingleVehicle = this.setSingleVehicle.bind(this);
+    this.setPenalty = this.setPenalty.bind(this);
 
     this.state = {
       token: '',
@@ -141,7 +142,9 @@ class Main extends Component {
         center: {
           lat: vehicle.locations[0].lat,
           lng: vehicle.locations[0].lng,
-        }
+        },
+        penalty: 0,
+        loc: vehicle.locations
       }
     })
     this.setState({
@@ -149,16 +152,69 @@ class Main extends Component {
     })
   }
 
+
+  setPenalty(penalty,vehicleId){
+    let vehiclesZoom = this.state.vehiclesZoom
+    for (var i in vehiclesZoom) {
+      if (vehiclesZoom[i]._id == vehicleId) {
+        let temp = this.state.vehicles[i].locations;
+        if(penalty === 2){
+          temp = this.state.vehicles[i].locations1;
+        }else if(penalty === 3){
+          temp = this.state.vehicles[i].locations2;
+        }else if(penalty === 4){
+          temp = this.state.vehicles[i].locations3;
+        }else if(penalty === 5){
+          temp = this.state.vehicles[i].locations4;
+        }
+        
+        vehiclesZoom[i].center = {
+          lat: temp[0].lat,
+          lng: temp[0].lng,
+        }
+
+        vehiclesZoom[i].loc = temp;
+        vehiclesZoom[i].penalty = penalty;
+        break; //Stop this loop, we found it!
+      }
+    }
+
+
+    this.setState({
+      vehiclesZoom: vehiclesZoom
+    })
+  }
+
   setSingleVehicle(vehicle) {
     let vehicles = this.state.vehicles
+    let vehiclesZoom = this.state.vehiclesZoom
     for (var i in vehicles) {
       if (vehicles[i]._id == vehicle._id) {
         vehicles[i] = vehicle;
         break; //Stop this loop, we found it!
       }
     }
+    for (var i in vehiclesZoom) {
+      if (vehiclesZoom[i]._id == vehicle._id) {
+        let temp = vehicle.locations;
+        if(vehiclesZoom[i].penalty == 2){
+            temp = vehicle.locations1;
+        }else if(vehiclesZoom[i].penalty == 3){
+            temp = vehicle.locations2;
+        }else if(vehiclesZoom[i].penalty == 4){
+            temp = vehicle.locations3;
+        }else if(vehiclesZoom[i].penalty == 5){
+            temp = vehicle.locations4;
+        }
+        console.log("vehicle");
+        console.log(vehicle);
+        vehiclesZoom[i].loc = temp;
+        break; //Stop this loop, we found it!
+      }
+    }
     this.setState({
-      vehicles: vehicles
+      vehicles: vehicles,
+      vehiclesZoom: vehiclesZoom
     })
   }
 
@@ -184,6 +240,7 @@ class Main extends Component {
           vehicle={this.state.vehicles.filter((vehicle) => vehicle._id === (match.params.vehicleId))[0]}
           vehiclesZoom={this.state.vehiclesZoom.filter((vehicle) => vehicle._id === (match.params.vehicleId))[0]}
           setSingleVehicle={this.setSingleVehicle}
+          setPenalty={this.setPenalty}
           setZoom={this.setZoom}
           setCenter={this.setCenter}
         />

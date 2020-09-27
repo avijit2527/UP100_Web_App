@@ -21,6 +21,10 @@ vehicleRouter.route('/')
                 res.setHeader('Content-Type', 'application/json');
                 for(var i=0;i<vehicles.length;i++){
                     vehicles[i].locations = vehicles[i].locations.slice(-24);
+                    vehicles[i].locations1 = vehicles[i].locations1.slice(-24);
+                    vehicles[i].locations2 = vehicles[i].locations2.slice(-24);
+                    vehicles[i].locations3 = vehicles[i].locations3.slice(-24);
+                    vehicles[i].locations4 = vehicles[i].locations4.slice(-24);
                 }
                 res.json(vehicles);
             }, (err) => next(err))
@@ -166,7 +170,7 @@ vehicleRouter.route('/')
 
 
 
-vehicleRouter.route('/:vehicleId/locations/:locationId')
+    vehicleRouter.route('/:vehicleId/locations/:locationId')
     .options(cors.corsWithOptions, (req, res) => {
         res.sendStatus(200);
     })
@@ -233,6 +237,378 @@ vehicleRouter.route('/:vehicleId/locations/:locationId')
             .then((vehicle) => {
                 if (vehicle != null && vehicle.locations.id(req.params.locationId) != null) {
                     vehicle.locations.id(req.params.locationId).remove();
+
+                    vehicle.save()
+                        .then((vehicle) => {
+                            Vehicles.findById(vehicle._id)
+                                .then((vehicle) => {
+                                    res.statusCode = 200;
+                                    res.setHeader('Content-Type', 'application/json');
+                                    res.json(vehicle);
+                                }, (err) => next(err));
+                        }, (err) => next(err));
+                }
+                else if (vehicle == null) {
+                    err = new Error('Vehicle ' + req.params.vehicleId + ' not found!');
+                    err.status = 404;
+                    return next(err);
+                }
+                else {
+                    err = new Error('Location ' + req.params.locationId + ' not found!');
+                    err.status = 404;
+                    return next(err);
+                }
+            }, (err) => next(err))
+            .catch((err) => next(err));
+    })
+
+
+    vehicleRouter.route('/:vehicleId/locations1/:locationId')
+    .options(cors.corsWithOptions, (req, res) => {
+        res.sendStatus(200);
+    })
+    .get(cors.cors, authenticate.verifyUser, (req, res, next) => {
+        Vehicles.findById(req.params.vehicleId)
+            .then((vehicle) => {
+                if (vehicle != null && vehicle.locations1.id(req.params.locationId) != null) {
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'application/json');
+                    res.json(vehicle.locations1.id(req.params.locationId));
+                }
+                else if (vehicle == null) {
+                    err = new Error('Vehicle ' + req.params.vehicleId + ' not found!');
+                    err.status = 404;
+                    return next(err);
+                }
+                else {
+                    err = new Error('Location ' + req.params.locationId + ' not found!');
+                    err.status = 404;
+                    return next(err);
+                }
+            }, (err) => next(err))
+            .catch((err) => next(err));
+    })
+    .post(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
+        res.statusCode = 403;
+        res.end('Post operation not supported on /vehicles/' + req.params.vehicleId + '/locations1/' + req.params.locationId);
+    })
+    .put(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
+        Vehicles.findById(req.params.vehicleId)
+            .then((vehicle) => {
+                if (vehicle != null && vehicle.locations1.id(req.params.locationId) != null) {
+                    if (req.body.lat) {
+                        vehicle.locations1.id(req.params.locationId).lat = req.body.lat;
+                    }
+                    if (req.body.lng) {
+                        vehicle.locations1.id(req.params.locationId).lng = req.body.lng;
+                    }
+                    vehicle.save()
+                        .then((vehicle) => {
+                            Vehicles.findById(vehicle._id)
+                                .then((vehicle) => {
+                                    res.statusCode = 200;
+                                    res.setHeader('Content-Type', 'application/json');
+                                    res.json(vehicle);
+                                }, (err) => next(err));
+                        }, (err) => next(err));
+                }
+                else if (vehicle == null) {
+                    err = new Error('Vehicle ' + req.params.vehicleId + ' not found!');
+                    err.status = 404;
+                    return next(err);
+                }
+                else {
+                    err = new Error('Location ' + req.params.locationId + ' not found!');
+                    err.status = 404;
+                    return next(err);
+                }
+            }, (err) => next(err))
+            .catch((err) => next(err));
+    })
+    .delete(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
+        Vehicles.findById(req.params.vehicleId)
+            .then((vehicle) => {
+                if (vehicle != null && vehicle.locations1.id(req.params.locationId) != null) {
+                    vehicle.locations1.id(req.params.locationId).remove();
+
+                    vehicle.save()
+                        .then((vehicle) => {
+                            Vehicles.findById(vehicle._id)
+                                .then((vehicle) => {
+                                    res.statusCode = 200;
+                                    res.setHeader('Content-Type', 'application/json');
+                                    res.json(vehicle);
+                                }, (err) => next(err));
+                        }, (err) => next(err));
+                }
+                else if (vehicle == null) {
+                    err = new Error('Vehicle ' + req.params.vehicleId + ' not found!');
+                    err.status = 404;
+                    return next(err);
+                }
+                else {
+                    err = new Error('Location ' + req.params.locationId + ' not found!');
+                    err.status = 404;
+                    return next(err);
+                }
+            }, (err) => next(err))
+            .catch((err) => next(err));
+    })
+
+
+    vehicleRouter.route('/:vehicleId/locations2/:locationId')
+    .options(cors.corsWithOptions, (req, res) => {
+        res.sendStatus(200);
+    })
+    .get(cors.cors, authenticate.verifyUser, (req, res, next) => {
+        Vehicles.findById(req.params.vehicleId)
+            .then((vehicle) => {
+                if (vehicle != null && vehicle.locations2.id(req.params.locationId) != null) {
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'application/json');
+                    res.json(vehicle.locations2.id(req.params.locationId));
+                }
+                else if (vehicle == null) {
+                    err = new Error('Vehicle ' + req.params.vehicleId + ' not found!');
+                    err.status = 404;
+                    return next(err);
+                }
+                else {
+                    err = new Error('Location ' + req.params.locationId + ' not found!');
+                    err.status = 404;
+                    return next(err);
+                }
+            }, (err) => next(err))
+            .catch((err) => next(err));
+    })
+    .post(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
+        res.statusCode = 403;
+        res.end('Post operation not supported on /vehicles/' + req.params.vehicleId + '/locations2/' + req.params.locationId);
+    })
+    .put(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
+        Vehicles.findById(req.params.vehicleId)
+            .then((vehicle) => {
+                if (vehicle != null && vehicle.locations2.id(req.params.locationId) != null) {
+                    if (req.body.lat) {
+                        vehicle.locations2.id(req.params.locationId).lat = req.body.lat;
+                    }
+                    if (req.body.lng) {
+                        vehicle.locations2.id(req.params.locationId).lng = req.body.lng;
+                    }
+                    vehicle.save()
+                        .then((vehicle) => {
+                            Vehicles.findById(vehicle._id)
+                                .then((vehicle) => {
+                                    res.statusCode = 200;
+                                    res.setHeader('Content-Type', 'application/json');
+                                    res.json(vehicle);
+                                }, (err) => next(err));
+                        }, (err) => next(err));
+                }
+                else if (vehicle == null) {
+                    err = new Error('Vehicle ' + req.params.vehicleId + ' not found!');
+                    err.status = 404;
+                    return next(err);
+                }
+                else {
+                    err = new Error('Location ' + req.params.locationId + ' not found!');
+                    err.status = 404;
+                    return next(err);
+                }
+            }, (err) => next(err))
+            .catch((err) => next(err));
+    })
+    .delete(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
+        Vehicles.findById(req.params.vehicleId)
+            .then((vehicle) => {
+                if (vehicle != null && vehicle.locations2.id(req.params.locationId) != null) {
+                    vehicle.locations2.id(req.params.locationId).remove();
+
+                    vehicle.save()
+                        .then((vehicle) => {
+                            Vehicles.findById(vehicle._id)
+                                .then((vehicle) => {
+                                    res.statusCode = 200;
+                                    res.setHeader('Content-Type', 'application/json');
+                                    res.json(vehicle);
+                                }, (err) => next(err));
+                        }, (err) => next(err));
+                }
+                else if (vehicle == null) {
+                    err = new Error('Vehicle ' + req.params.vehicleId + ' not found!');
+                    err.status = 404;
+                    return next(err);
+                }
+                else {
+                    err = new Error('Location ' + req.params.locationId + ' not found!');
+                    err.status = 404;
+                    return next(err);
+                }
+            }, (err) => next(err))
+            .catch((err) => next(err));
+    })
+
+
+    vehicleRouter.route('/:vehicleId/locations3/:locationId')
+    .options(cors.corsWithOptions, (req, res) => {
+        res.sendStatus(200);
+    })
+    .get(cors.cors, authenticate.verifyUser, (req, res, next) => {
+        Vehicles.findById(req.params.vehicleId)
+            .then((vehicle) => {
+                if (vehicle != null && vehicle.locations3.id(req.params.locationId) != null) {
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'application/json');
+                    res.json(vehicle.locations3.id(req.params.locationId));
+                }
+                else if (vehicle == null) {
+                    err = new Error('Vehicle ' + req.params.vehicleId + ' not found!');
+                    err.status = 404;
+                    return next(err);
+                }
+                else {
+                    err = new Error('Location ' + req.params.locationId + ' not found!');
+                    err.status = 404;
+                    return next(err);
+                }
+            }, (err) => next(err))
+            .catch((err) => next(err));
+    })
+    .post(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
+        res.statusCode = 403;
+        res.end('Post operation not supported on /vehicles/' + req.params.vehicleId + '/locations3/' + req.params.locationId);
+    })
+    .put(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
+        Vehicles.findById(req.params.vehicleId)
+            .then((vehicle) => {
+                if (vehicle != null && vehicle.locations3.id(req.params.locationId) != null) {
+                    if (req.body.lat) {
+                        vehicle.locations3.id(req.params.locationId).lat = req.body.lat;
+                    }
+                    if (req.body.lng) {
+                        vehicle.locations3.id(req.params.locationId).lng = req.body.lng;
+                    }
+                    vehicle.save()
+                        .then((vehicle) => {
+                            Vehicles.findById(vehicle._id)
+                                .then((vehicle) => {
+                                    res.statusCode = 200;
+                                    res.setHeader('Content-Type', 'application/json');
+                                    res.json(vehicle);
+                                }, (err) => next(err));
+                        }, (err) => next(err));
+                }
+                else if (vehicle == null) {
+                    err = new Error('Vehicle ' + req.params.vehicleId + ' not found!');
+                    err.status = 404;
+                    return next(err);
+                }
+                else {
+                    err = new Error('Location ' + req.params.locationId + ' not found!');
+                    err.status = 404;
+                    return next(err);
+                }
+            }, (err) => next(err))
+            .catch((err) => next(err));
+    })
+    .delete(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
+        Vehicles.findById(req.params.vehicleId)
+            .then((vehicle) => {
+                if (vehicle != null && vehicle.locations3.id(req.params.locationId) != null) {
+                    vehicle.locations3.id(req.params.locationId).remove();
+
+                    vehicle.save()
+                        .then((vehicle) => {
+                            Vehicles.findById(vehicle._id)
+                                .then((vehicle) => {
+                                    res.statusCode = 200;
+                                    res.setHeader('Content-Type', 'application/json');
+                                    res.json(vehicle);
+                                }, (err) => next(err));
+                        }, (err) => next(err));
+                }
+                else if (vehicle == null) {
+                    err = new Error('Vehicle ' + req.params.vehicleId + ' not found!');
+                    err.status = 404;
+                    return next(err);
+                }
+                else {
+                    err = new Error('Location ' + req.params.locationId + ' not found!');
+                    err.status = 404;
+                    return next(err);
+                }
+            }, (err) => next(err))
+            .catch((err) => next(err));
+    })
+
+
+    vehicleRouter.route('/:vehicleId/locations4/:locationId')
+    .options(cors.corsWithOptions, (req, res) => {
+        res.sendStatus(200);
+    })
+    .get(cors.cors, authenticate.verifyUser, (req, res, next) => {
+        Vehicles.findById(req.params.vehicleId)
+            .then((vehicle) => {
+                if (vehicle != null && vehicle.locations4.id(req.params.locationId) != null) {
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'application/json');
+                    res.json(vehicle.locations4.id(req.params.locationId));
+                }
+                else if (vehicle == null) {
+                    err = new Error('Vehicle ' + req.params.vehicleId + ' not found!');
+                    err.status = 404;
+                    return next(err);
+                }
+                else {
+                    err = new Error('Location ' + req.params.locationId + ' not found!');
+                    err.status = 404;
+                    return next(err);
+                }
+            }, (err) => next(err))
+            .catch((err) => next(err));
+    })
+    .post(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
+        res.statusCode = 403;
+        res.end('Post operation not supported on /vehicles/' + req.params.vehicleId + '/locations4/' + req.params.locationId);
+    })
+    .put(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
+        Vehicles.findById(req.params.vehicleId)
+            .then((vehicle) => {
+                if (vehicle != null && vehicle.locations4.id(req.params.locationId) != null) {
+                    if (req.body.lat) {
+                        vehicle.locations4.id(req.params.locationId).lat = req.body.lat;
+                    }
+                    if (req.body.lng) {
+                        vehicle.locations4.id(req.params.locationId).lng = req.body.lng;
+                    }
+                    vehicle.save()
+                        .then((vehicle) => {
+                            Vehicles.findById(vehicle._id)
+                                .then((vehicle) => {
+                                    res.statusCode = 200;
+                                    res.setHeader('Content-Type', 'application/json');
+                                    res.json(vehicle);
+                                }, (err) => next(err));
+                        }, (err) => next(err));
+                }
+                else if (vehicle == null) {
+                    err = new Error('Vehicle ' + req.params.vehicleId + ' not found!');
+                    err.status = 404;
+                    return next(err);
+                }
+                else {
+                    err = new Error('Location ' + req.params.locationId + ' not found!');
+                    err.status = 404;
+                    return next(err);
+                }
+            }, (err) => next(err))
+            .catch((err) => next(err));
+    })
+    .delete(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
+        Vehicles.findById(req.params.vehicleId)
+            .then((vehicle) => {
+                if (vehicle != null && vehicle.locations4.id(req.params.locationId) != null) {
+                    vehicle.locations4.id(req.params.locationId).remove();
 
                     vehicle.save()
                         .then((vehicle) => {
